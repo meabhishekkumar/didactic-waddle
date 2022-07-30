@@ -13,6 +13,10 @@ const typeDefs = gql`
     published: DateTime
     title: String
     url: String!
+    similar(first: Int=3): [Article!]! @cypher(statement: """
+   MATCH (this)-[:HAS_TOPIC]->(:Topic)<-[:HAS_TOPIC]-(rec:Article)
+    RETURN rec LIMIT $first
+    """)
     photo: Photo! @relationship(type: "HAS_PHOTO", direction: OUT)
     authors: [Author!]! @relationship(type: "BYLINE", direction: OUT)
     topics: [Topic!]! @relationship(type: "HAS_TOPIC", direction: OUT)
